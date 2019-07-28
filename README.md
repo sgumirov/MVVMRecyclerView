@@ -1,4 +1,7 @@
-MVVM data loading-compatible implementation of RecyclerView's Adapter class.
+MVVM data binding aware implementation of RecyclerView's Adapter class.
+
+Use-case: load data for each item using ViewModel and databinding. Takes care of
+lifecycle.
 
 Usage:
 
