@@ -27,6 +27,8 @@ class SampleItemViewModel(private val repo: DataLoadRepository): ViewModel(), It
 
 Use annotations for less boilerplate.
 
+Experiment with WeakReference in Repository. Maybe compare it with DAO.
+
 ### License and copyright
 
 Copyright (c) 2019 by Shamil Gumirov
