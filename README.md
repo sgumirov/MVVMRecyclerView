@@ -1,21 +1,39 @@
-# MVVM databinding-aware RecyclerView Adapter
+# Databinding-aware RecyclerView
 
-MVVM data binding aware implementation of RecyclerView's Adapter class.
+## Motivation
 
-Use-case: load data for each item using ViewModel and databinding. Takes care of
-lifecycle.
+RecyclerView is the most used and one of the most complex Android components.
 
-Usage:
+However with RecyclerView there's no simple way of:
+* use Jetpack's [Data Binding|https://developer.android.com/topic/libraries/data-binding] library with view models backing items
+* on-demand item data loading (see [Adaptive loading](.#2-adaptive-loading) below) - a problem for large memory usage
+* without [infinite scroll|https://hackernoon.com/stop-infinite-scrolling-on-your-website-now-ie6rg31eu]
+* without [pagination|https://www.bennadel.com/blog/2951-the-user-experience-ux-of-pagination.htm]
 
-`List<ID> -> adapter -> binds ViewModel for id -> loads data`
+This library fills this gap.
 
-ViewModel can be implemented like:
+## Value for user
+
+A clear list with:
+* real scrollbar
+* no pagination
+* items' content is loaded on demand.
+
+## How to use
+
+
+
+## Use case: load data for each item with ViewModel and display with data binding
+
+`List<ID> -> adapter -> re-use ViewModel for ID on-demand -> load data and display`
+
+With this library ViewModel becomes very lightweight:
 
 ```
 class SampleItemViewModel(private val repo: DataLoadRepository): ViewModel(), ItemViewModel<String> {
-    val id = MutableLiveData<String>()
+    private val id = MutableLiveData<String>()
 
-    val data = Transformations.switchMap(id) { repo.load(it) }
+    val data = switchMap(id) { repo.load(it) }
 
     override fun setId(id: String) {
         this.id.postValue(id)
@@ -23,11 +41,11 @@ class SampleItemViewModel(private val repo: DataLoadRepository): ViewModel(), It
 }
 ```
 
-## TODOs
+## Adaptive loading
 
-Use annotations for less boilerplate.
-
-Experiment with WeakReference in Repository. Maybe compare it with DAO.
+Obviously enough that loading items one-by-one does not make much sense: it is slow. However
+loading is part of repository level. With proper caching and batch loading it should be fast
+enough for most purposes.
 
 ### License and copyright
 
